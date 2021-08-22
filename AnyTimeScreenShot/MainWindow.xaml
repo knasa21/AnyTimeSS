@@ -3,10 +3,39 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
         xmlns:local="clr-namespace:AnyTimeScreenShot"
+        xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+        Closing="Window_Close"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="AnyTimeScreenShot 設定" Height="300" Width="500">
     <Grid>
-        
+        <TabControl>
+            <TabItem Header="キャプチャ設定">
+                <Grid Background="#FFE5E5E5" Margin="0,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation ="Horizontal" Grid.ColumnSpan="1" HorizontalAlignment="Stretch" Height="30" Margin="0,10,0,0" VerticalAlignment="Top">
+                        <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="キャプチャ領域" Margin="0, 0, 20, 0"/>
+                        <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="X: " Margin="0, 0, 0, 0"/>
+                        <xctk:SingleUpDown x:Name = "fCaptureX" Height="20" ValueChanged="FCaptureX_ValueChanged" Text="{Binding Path=RectX, Mode=TwoWay}"/>
+                        <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="Y: " Margin="20, 0, 0, 0"/>
+                        <xctk:SingleUpDown x:Name = "fCaptureY" Height="20" ValueChanged="FCaptureX_ValueChanged" Text="{Binding Path=RectY, Mode=TwoWay}"/>
+                        <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="W: " Margin="20, 0, 0, 0"/>
+                        <xctk:SingleUpDown x:Name = "fCaptureW" Height="20" ValueChanged="FCaptureX_ValueChanged" Text="{Binding Path=RectW, Mode=TwoWay}"/>
+                        <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="H: " Margin="20, 0, 0, 0"/>
+                        <xctk:SingleUpDown x:Name = "fCaptureH" Height="20" ValueChanged="FCaptureX_ValueChanged" Text="{Binding Path=RectH, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <StackPanel Orientation ="Horizontal" HorizontalAlignment="Stretch" Height="30" Margin="0,45,0,0" VerticalAlignment="Top">
+                        <Button Content="表示" HorizontalAlignment="Center" Margin="100,0,0,0" VerticalAlignment="Center" Width="100" Click="Button_Click_View" Height="18"/>
+                        <Button Content="非表示" HorizontalAlignment="Center" Margin="10,0,0,0" VerticalAlignment="Center" Width="100" Click="Button_Click_Close" Height="18"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="TabItem">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
