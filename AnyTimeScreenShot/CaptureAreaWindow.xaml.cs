@@ -7,7 +7,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -29,6 +31,22 @@ namespace AnyTimeScreenShot
         {
             e.Cancel = true;
             this.Visibility = Visibility.Hidden;
+        }
+
+        private void Window_StateChanged( object sender, EventArgs e )
+        {
+            Console.WriteLine($"Window State = {WindowState}");
+            if(WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Normal;
+            }
+
+            // CurrentDisplay を取得してフルスクリーン時にそのサイズに設定する
+            Screen currentScreen = Screen.FromHandle( new WindowInteropHelper( this ).Handle );
+            this.Left = currentScreen.Bounds.X;
+            this.Top = currentScreen.Bounds.Y;
+            this.Width = currentScreen.Bounds.Width;
+            this.Height = currentScreen.Bounds.Height;
         }
     }
 }

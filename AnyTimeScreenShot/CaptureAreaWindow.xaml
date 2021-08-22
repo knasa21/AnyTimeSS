@@ -10,6 +10,7 @@
         Background="#4A909000"
         WindowStyle="None"
         ResizeMode="CanResize"
+        StateChanged="Window_StateChanged"
         Title="CaptureAreaWindow" Height="450" Width="800">
 
 <WindowChrome.WindowChrome>
