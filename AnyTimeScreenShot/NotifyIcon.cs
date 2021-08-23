@@ -55,7 +55,7 @@ namespace AnyTimeScreenShot
         /// </summary>
         private void OpenSettingsWindow()
         {
-            ATWindow.SetVisible( WindowName.SETTING, Visibility.Visible );
+            WindowManager.SetVisible( WindowName.SETTING, Visibility.Visible );
         }
 
         /// <summary>

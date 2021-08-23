@@ -20,11 +20,10 @@ namespace AnyTimeScreenShot
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : ATWindow
     {
         private Rectangle mCaptureRect = new Rectangle( 0, 0, 1920, 1080);
 
-        private CaptureAreaWindow mCaptureWindow;
         private bool isInputUI = true;
 
         public Rectangle GetRectangle() { return mCaptureRect; }
@@ -35,7 +34,9 @@ namespace AnyTimeScreenShot
             set
             {
                 mCaptureRect.X = value;
-                mCaptureWindow.Left = mCaptureRect.X;
+
+                CaptureAreaWindow window = WindowManager.GetCaptureAreaWindow();
+                window.Left = mCaptureRect.X;
             }
         }
         public int RectY
@@ -44,7 +45,9 @@ namespace AnyTimeScreenShot
             set
             {
                 mCaptureRect.Y = value;
-                mCaptureWindow.Top = mCaptureRect.Y;
+
+                CaptureAreaWindow window = WindowManager.GetCaptureAreaWindow();
+                window.Top = mCaptureRect.Y;
             }
         }
         public int RectW
@@ -53,7 +56,9 @@ namespace AnyTimeScreenShot
             set
             {
                 mCaptureRect.Width = value;
-                mCaptureWindow.Width = mCaptureRect.Width;
+
+                CaptureAreaWindow window = WindowManager.GetCaptureAreaWindow();
+                window.Width = mCaptureRect.Width;
             }
         }
         public int RectH
@@ -62,8 +67,27 @@ namespace AnyTimeScreenShot
             set
             {
                 mCaptureRect.Height = value;
-                mCaptureWindow.Height = mCaptureRect.Height;
+
+                CaptureAreaWindow window = WindowManager.GetCaptureAreaWindow();
+                window.Height = mCaptureRect.Height;
             }
+        }
+
+
+        private MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        /// <summary>
+        /// 初期化処理
+        /// </summary>
+        public override void Initialize()
+        {
+            this.DataContext = this;
+            CaptureAreaWindow window = WindowManager.GetCaptureAreaWindow(); 
+            window.SizeChanged += OnWindowSizeChanged;
+            window.LocationChanged += OnWindowLocationChanged;
         }
 
         private void CheckRect()
@@ -77,14 +101,16 @@ namespace AnyTimeScreenShot
 
         private void AdaptWindowSize()
         {
-            fCaptureW.Text = mCaptureWindow.Width.ToString();
-            fCaptureH.Text = mCaptureWindow.Height.ToString();
+            CaptureAreaWindow window = WindowManager.GetCaptureAreaWindow();
+            fCaptureW.Text = window.Width.ToString();
+            fCaptureH.Text = window.Height.ToString();
         }
 
         private void AdaptWindowLocation()
         {
-            fCaptureX.Text = mCaptureWindow.Left.ToString();
-            fCaptureY.Text = mCaptureWindow.Top.ToString();
+            CaptureAreaWindow window = WindowManager.GetCaptureAreaWindow();
+            fCaptureX.Text = window.Left.ToString();
+            fCaptureY.Text = window.Top.ToString();
         }
 
         /// <summary>
@@ -108,17 +134,7 @@ namespace AnyTimeScreenShot
         }
 
 
-        public MainWindow()
-        {
-            InitializeComponent();
-            this.DataContext = this;
-
-            mCaptureWindow = new CaptureAreaWindow();
-            mCaptureWindow.Show();
-            mCaptureWindow.Visibility = Visibility.Hidden;
-            mCaptureWindow.SizeChanged += OnWindowSizeChanged;
-            mCaptureWindow.LocationChanged += OnWindowLocationChanged;
-        }
+        
 
         private void TextBoxNumberValidation( object sender, TextCompositionEventArgs e )
         {
@@ -134,14 +150,14 @@ namespace AnyTimeScreenShot
 
         private void Button_Click_View( object sender, RoutedEventArgs e )
         {
-            mCaptureWindow.Visibility = Visibility.Visible;
+            WindowManager.SetVisible( WindowName.CAPTURE, Visibility.Visible );
             AdaptWindowSize();
             AdaptWindowLocation();
         }
 
         private void Button_Click_Close( object sender, RoutedEventArgs e )
         {
-            mCaptureWindow.Visibility = Visibility.Hidden;
+            WindowManager.SetVisible( WindowName.CAPTURE, Visibility.Hidden );
         }
 
         private void FCaptureX_ValueChanged( object sender, RoutedPropertyChangedEventArgs<object> e )
@@ -149,7 +165,24 @@ namespace AnyTimeScreenShot
             SingleUpDown form = sender as SingleUpDown;
             if(form != null)
             {
-                Console.WriteLine($"{form.Name} = {form.Text}");
+                CaptureAreaWindow window = WindowManager.GetCaptureAreaWindow();
+                int value = Int32.Parse(form.Text);
+                switch ( form.Name )
+                {
+                    case "fCaptureX":
+                        window.Left = value;
+                        break;
+                    case "fCaptureY":
+                        window.Top = value;
+                        break;
+                    case "fCaptureW":
+                        window.Width = value;
+                        break;
+                    case "fCaptureH":
+                        window.Height = value;
+                        break;
+                }
+
             }
         }
     }

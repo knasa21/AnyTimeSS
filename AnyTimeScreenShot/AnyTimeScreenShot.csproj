@@ -73,6 +73,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ATWindow.cs" />
     <Compile Include="CaptureAreaWindow.xaml.cs">
       <DependentUpon>CaptureAreaWindow.xaml</DependentUpon>
     </Compile>

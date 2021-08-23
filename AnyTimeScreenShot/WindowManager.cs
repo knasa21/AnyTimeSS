@@ -10,31 +10,31 @@ namespace AnyTimeScreenShot
         CAPTURE,
     }
 
-    static public class ATWindow
+    static public class WindowManager
     {
         public static MainWindow GetSettingWindow()
         {
-            return (MainWindow)WindowManager.Instance.GetWindow( WindowName.SETTING );
+            return (MainWindow)WindowManagerInternal.Instance.GetWindow( WindowName.SETTING );
         }
 
         public static CaptureAreaWindow GetCaptureAreaWindow()
         {
-            return (CaptureAreaWindow)WindowManager.Instance.GetWindow( WindowName.CAPTURE );
+            return (CaptureAreaWindow)WindowManagerInternal.Instance.GetWindow( WindowName.CAPTURE );
         }
 
         public static void ShowWindow(WindowName name)
         {
-            WindowManager.Instance.ShowWindow(name);
+            WindowManagerInternal.Instance.ShowWindow(name);
         }
 
         public static void CloseWindow(WindowName name)
         {
-            WindowManager.Instance.CloseWindow(name);
+            WindowManagerInternal.Instance.CloseWindow(name);
         }
 
         public static void SetVisible(WindowName name, Visibility visibility)
         {
-            WindowManager.Instance.SetVisible(name, visibility);
+            WindowManagerInternal.Instance.SetVisible(name, visibility);
         }
     }
 
@@ -43,26 +43,41 @@ namespace AnyTimeScreenShot
     /// <summary>
     /// Windowを他クラスから統一してアクセスするためのクラス
     /// </summary>
-    sealed class WindowManager
+    sealed class WindowManagerInternal
     {
 
-        private static readonly Lazy<WindowManager> mInstance
-            = new Lazy<WindowManager>(() => new WindowManager());
+        private static WindowManagerInternal mInstance;
 
-        private WindowManager()
+        private static ATWindow[] mWindows;
+
+        private WindowManagerInternal()
         {
-            mWindows = new Window[] {
-                new MainWindow(),       // SETTING
-                new CaptureAreaWindow() // CAPTURE
+            mWindows = new ATWindow[] {
+                (ATWindow)Activator.CreateInstance(typeof(MainWindow), true),          // SETTING
+                (ATWindow)Activator.CreateInstance(typeof(CaptureAreaWindow), true),   // CAPTURE
             };
         }
 
-        public static WindowManager Instance
+        private static void WindowInitialize()
         {
-            get => mInstance.Value;
+            foreach(var window in mWindows)
+            {
+                window.Initialize();
+            }
         }
 
-        private Window[] mWindows;
+        public static WindowManagerInternal Instance
+        {
+            get
+            {
+                if(mInstance == null)
+                {
+                    mInstance = new WindowManagerInternal();
+                    WindowInitialize();
+                }
+                return mInstance;
+            }
+        }
 
         public Window GetWindow(WindowName name)
         {

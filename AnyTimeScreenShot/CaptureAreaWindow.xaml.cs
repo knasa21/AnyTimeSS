@@ -1,29 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace AnyTimeScreenShot
 {
     /// <summary>
     /// CaptureAreaWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class CaptureAreaWindow : Window
+    public partial class CaptureAreaWindow : ATWindow
     {
-        public CaptureAreaWindow()
+        private CaptureAreaWindow()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// 初期化処理
+        /// </summary>
+        public override void Initialize()
+        {
             MouseLeftButtonDown += ( _, __ ) => { DragMove(); };
         }
 
