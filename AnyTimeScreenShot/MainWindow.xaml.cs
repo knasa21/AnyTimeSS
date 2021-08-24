@@ -22,57 +22,10 @@ namespace AnyTimeScreenShot
     /// </summary>
     public partial class MainWindow : ATWindow
     {
-        private Rectangle mCaptureRect = new Rectangle( 0, 0, 1920, 1080);
-
+        public delegate void FileNameChange( string fileName );
+        private FileNameChange mOnFileNameChange;
         private bool isInputUI = true;
-
-        public Rectangle GetRectangle() { return mCaptureRect; }
-
-        public int RectX
-        {
-            get { return mCaptureRect.X; }
-            set
-            {
-                mCaptureRect.X = value;
-
-                CaptureAreaWindow window = WindowManager.GetCaptureAreaWindow();
-                window.Left = mCaptureRect.X;
-            }
-        }
-        public int RectY
-        {
-            get { return mCaptureRect.Y; }
-            set
-            {
-                mCaptureRect.Y = value;
-
-                CaptureAreaWindow window = WindowManager.GetCaptureAreaWindow();
-                window.Top = mCaptureRect.Y;
-            }
-        }
-        public int RectW
-        {
-            get { return mCaptureRect.Width; }
-            set
-            {
-                mCaptureRect.Width = value;
-
-                CaptureAreaWindow window = WindowManager.GetCaptureAreaWindow();
-                window.Width = mCaptureRect.Width;
-            }
-        }
-        public int RectH
-        {
-            get { return mCaptureRect.Height; }
-            set
-            {
-                mCaptureRect.Height = value;
-
-                CaptureAreaWindow window = WindowManager.GetCaptureAreaWindow();
-                window.Height = mCaptureRect.Height;
-            }
-        }
-
+        
 
         private MainWindow()
         {
@@ -84,57 +37,15 @@ namespace AnyTimeScreenShot
         /// </summary>
         public override void Initialize()
         {
-            this.DataContext = this;
-            CaptureAreaWindow window = WindowManager.GetCaptureAreaWindow(); 
-            window.SizeChanged += OnWindowSizeChanged;
-            window.LocationChanged += OnWindowLocationChanged;
         }
 
         private void CheckRect()
         {
             if(isInputUI)
             {
-                Console.WriteLine( $"{mCaptureRect.ToString()}" );
             }
             isInputUI = true;
         }
-
-        private void AdaptWindowSize()
-        {
-            CaptureAreaWindow window = WindowManager.GetCaptureAreaWindow();
-            fCaptureW.Text = window.Width.ToString();
-            fCaptureH.Text = window.Height.ToString();
-        }
-
-        private void AdaptWindowLocation()
-        {
-            CaptureAreaWindow window = WindowManager.GetCaptureAreaWindow();
-            fCaptureX.Text = window.Left.ToString();
-            fCaptureY.Text = window.Top.ToString();
-        }
-
-        /// <summary>
-        /// Windowサイズが変更された時のイベント
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnWindowSizeChanged( object sender, SizeChangedEventArgs e )
-        {
-            AdaptWindowSize();
-        }
-
-        /// <summary>
-        /// Windowの位置が変更された時のイベント
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnWindowLocationChanged( object sender, EventArgs e )
-        {
-            AdaptWindowLocation();
-        }
-
-
-        
 
         private void TextBoxNumberValidation( object sender, TextCompositionEventArgs e )
         {
@@ -151,8 +62,6 @@ namespace AnyTimeScreenShot
         private void Button_Click_View( object sender, RoutedEventArgs e )
         {
             WindowManager.SetVisible( WindowName.CAPTURE, Visibility.Visible );
-            AdaptWindowSize();
-            AdaptWindowLocation();
         }
 
         private void Button_Click_Close( object sender, RoutedEventArgs e )
@@ -179,11 +88,16 @@ namespace AnyTimeScreenShot
                         window.Width = value;
                         break;
                     case "fCaptureH":
-                        window.Height = value;
+                        //window.Height = value;
                         break;
                 }
 
             }
+        }
+
+        private void FFileName_TextChanged( object sender, TextChangedEventArgs e )
+        {
+            TextBox form = sender as TextBox;
         }
     }
 }

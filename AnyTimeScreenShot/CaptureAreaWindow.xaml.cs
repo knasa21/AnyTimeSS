@@ -21,6 +21,7 @@ namespace AnyTimeScreenShot
         public override void Initialize()
         {
             MouseLeftButtonDown += ( _, __ ) => { DragMove(); };
+            this.DataContext = WindowManager.GetSettingWindow();
         }
 
         private void Window_Close(object sender, System.ComponentModel.CancelEventArgs e)

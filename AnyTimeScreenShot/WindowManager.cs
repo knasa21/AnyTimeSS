@@ -47,6 +47,7 @@ namespace AnyTimeScreenShot
     {
 
         private static WindowManagerInternal mInstance;
+        private static readonly object mLockObj = new object();
 
         private static ATWindow[] mWindows;
 
@@ -70,10 +71,17 @@ namespace AnyTimeScreenShot
         {
             get
             {
-                if(mInstance == null)
+                if ( mInstance == null )
                 {
-                    mInstance = new WindowManagerInternal();
-                    WindowInitialize();
+                    lock ( mLockObj )
+                    {
+
+                        if ( mInstance == null )
+                        {
+                            mInstance = new WindowManagerInternal();
+                            WindowInitialize();
+                        }
+                    }
                 }
                 return mInstance;
             }

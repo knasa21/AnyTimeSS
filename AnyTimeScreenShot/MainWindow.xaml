@@ -19,17 +19,25 @@
                     <StackPanel Orientation ="Horizontal" Grid.ColumnSpan="1" HorizontalAlignment="Stretch" Height="30" Margin="0,10,0,0" VerticalAlignment="Top">
                         <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="キャプチャ領域" Margin="0, 0, 20, 0"/>
                         <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="X: " Margin="0, 0, 0, 0"/>
-                        <xctk:SingleUpDown x:Name = "fCaptureX" Height="20" ValueChanged="FCaptureX_ValueChanged" Text="{Binding Path=RectX, Mode=TwoWay}"/>
+                        <xctk:SingleUpDown x:Name = "fCaptureX" Height="20" ValueChanged="FCaptureX_ValueChanged" Text="{Binding Path=RectX}"/>
                         <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="Y: " Margin="20, 0, 0, 0"/>
-                        <xctk:SingleUpDown x:Name = "fCaptureY" Height="20" ValueChanged="FCaptureX_ValueChanged" Text="{Binding Path=RectY, Mode=TwoWay}"/>
+                        <xctk:SingleUpDown x:Name = "fCaptureY" Height="20" ValueChanged="FCaptureX_ValueChanged" Text="{Binding Path=RectY}"/>
                         <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="W: " Margin="20, 0, 0, 0"/>
-                        <xctk:SingleUpDown x:Name = "fCaptureW" Height="20" ValueChanged="FCaptureX_ValueChanged" Text="{Binding Path=RectW, Mode=TwoWay}"/>
+                        <xctk:SingleUpDown x:Name = "fCaptureW" Height="20" ValueChanged="FCaptureX_ValueChanged" Text="{Binding Path=RectW}"/>
                         <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="H: " Margin="20, 0, 0, 0"/>
-                        <xctk:SingleUpDown x:Name = "fCaptureH" Height="20" ValueChanged="FCaptureX_ValueChanged" Text="{Binding Path=RectH, Mode=TwoWay}"/>
+                        <xctk:SingleUpDown x:Name = "fCaptureH" Height="20" ValueChanged="FCaptureX_ValueChanged" Text="{Binding Path=RectH}"/>
                     </StackPanel>
                     <StackPanel Orientation ="Horizontal" HorizontalAlignment="Stretch" Height="30" Margin="0,45,0,0" VerticalAlignment="Top">
                         <Button Content="表示" HorizontalAlignment="Center" Margin="100,0,0,0" VerticalAlignment="Center" Width="100" Click="Button_Click_View" Height="18"/>
                         <Button Content="非表示" HorizontalAlignment="Center" Margin="10,0,0,0" VerticalAlignment="Center" Width="100" Click="Button_Click_Close" Height="18"/>
+                    </StackPanel>
+                    <StackPanel Orientation ="Horizontal" HorizontalAlignment="Stretch" Height="30" Margin="0,80,0,0" VerticalAlignment="Top">
+                        <TextBlock TextWrapping="Wrap" Text="保存先" Width="100" TextAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock x:Name ="fFilePath" HorizontalAlignment="Left"  Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="242"/>
+                        <Button Content="保存先変更" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center" Width="75"/>
+                    </StackPanel>
+                    <StackPanel Orientation ="Horizontal" HorizontalAlignment="Stretch" Height="30" Margin="0,120,0,0" VerticalAlignment="Top">
+                        <TextBox x:Name ="fFileName" HorizontalAlignment="Center" Height="22" Margin="200,4" TextWrapping="Wrap" Text="{Binding Path=FileName, Mode=OneWayToSource}" VerticalAlignment="Center" Width="200" />
                     </StackPanel>
                 </Grid>
             </TabItem>

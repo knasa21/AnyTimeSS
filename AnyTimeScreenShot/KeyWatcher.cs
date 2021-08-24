@@ -9,7 +9,9 @@ namespace AnyTimeScreenShot
 
     public class KeyWatcher
     {
+        // キーが押された時のイベント
         public delegate void EventOnPressKey();
+        public EventOnPressKey OnPressKey;
 
         // 別スレッド管理用のTask
         private Task mTask;
@@ -20,11 +22,8 @@ namespace AnyTimeScreenShot
         // GetAsyncKeyStateの押下確認用ビットマスク
         private const Int64 mMask64 = (Int64)0x8000;
 
-        // キーが押された時のイベント
-        public EventOnPressKey OnPressKey;
-
         [System.Runtime.InteropServices.DllImport( "user32.dll" )]
-        private static extern IntPtr GetAsyncKeyState( IntPtr pKey );
+        private static extern short GetAsyncKeyState( int pKey );
 
         public KeyWatcher()
         {
@@ -33,13 +32,11 @@ namespace AnyTimeScreenShot
 
         ~KeyWatcher()
         {
-            Console.WriteLine("Destructer");
             WatchStop();
         }
 
         public void WatchStart()
         {
-            Console.WriteLine("WatchStart");
             if ( mTask != null && mTask.Status == TaskStatus.Running )
             {
                 return;
@@ -54,32 +51,40 @@ namespace AnyTimeScreenShot
 
         public void WatchStop()
         {
-            Console.WriteLine("WatchStop");
             mStopFlag = true;
             mTask = null;
         }
 
+        // TODO: どこからもらえないか、無ければちゃんと用意
+        const int LShiftKey = 0xA0;
+        const int RShiftKey = 0xA1;
+        const int LCtrlKey = 0xA2;
+        const int RCtrlKey = 0xA3;
+        const int AltKey = 0x12;
+        const int F12Key = 0x7B;
+
         private void WatchKey()
         {
-            bool altFlag = false;
-            bool f12Flag = false;
+            bool keyOneFlag = false;
+            bool keyTwoFlag = false;
             bool shotFlag = false;
             bool releaseFlag = true;
+
             while(!mStopFlag)
             {
-                altFlag = false;
-                f12Flag = false;
-                if( (GetAsyncKeyState((IntPtr)0x12).ToInt64() & mMask64) != 0 )
+                keyOneFlag = false;
+                keyTwoFlag = false;
+                if( (GetAsyncKeyState(LShiftKey) & mMask64) != 0 )
                 {
-                    altFlag = true;
+                    keyOneFlag = true;
                 }
 
-                if( (GetAsyncKeyState((IntPtr)0x7B).ToInt64() & mMask64) != 0 )
+                if( (GetAsyncKeyState(LCtrlKey) & mMask64) != 0 )
                 {
-                    f12Flag = true;
+                    keyTwoFlag = true;
                 }
 
-                shotFlag = altFlag && f12Flag;
+                shotFlag = keyOneFlag && keyTwoFlag;
                 if(releaseFlag == false)
                 {
                     releaseFlag = !shotFlag;
