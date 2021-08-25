@@ -1,14 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace AnyTimeScreenShot
 {
+    public class FileSaveViewMode : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void RaisePropertyChanged( [CallerMemberName]string propertyName = null )
+            => PropertyChanged?.Invoke( this, new PropertyChangedEventArgs(propertyName) );
+
+        string mFileName;
+
+        public string FileName
+        {
+            get { return mFileName; }
+            set
+            {
+                if ( mFileName != value ) { mFileName = value; RaisePropertyChanged(); }
+            }
+        }
+    }
+
     /// <summary>
     /// App.xaml の相互作用ロジック
     /// </summary>
@@ -16,6 +37,7 @@ namespace AnyTimeScreenShot
     {
         private NotifyIcon mNotifyIcon;
         private int counter = 0;
+        private FileSaveViewMode mFileSaveViewModel = new FileSaveViewMode();
 
         KeyWatcher mKeyWatcher;
         private Rectangle mCaptureRect = new Rectangle( 0, 0, 400, 600);
@@ -66,7 +88,6 @@ namespace AnyTimeScreenShot
                 window.Height = mCaptureRect.Height;
             }
         }
-        public string FileName { get; set; } = "capture";
 
         /// <summary>
         /// スタートアップイベント
@@ -82,8 +103,10 @@ namespace AnyTimeScreenShot
             mKeyWatcher.OnPressKey += ScreenShot;
             mKeyWatcher.WatchStart();
 
+            WindowManager.GetSettingWindow().DataContext = mFileSaveViewModel;
+
             CaptureAreaWindow window = WindowManager.GetCaptureAreaWindow(); 
-            window.DataContext = this;
+            window.DataContext = mFileSaveViewModel;
             window.SizeChanged += AdaptWindowSize;
             window.LocationChanged += AdaptWindowLocation;
         }
@@ -120,7 +143,7 @@ namespace AnyTimeScreenShot
         private void ScreenShot()
         {
             Console.WriteLine("Gooooood!!!!");
-            ScreenCapture.Capture( mCaptureRect, $@"D:\Pictures\Capture\{FileName}_{counter++}" );
+            ScreenCapture.Capture( mCaptureRect, $@"D:\Pictures\Capture\{mFileSaveViewModel.FileName}_{counter++}" );
         }
 
     }
