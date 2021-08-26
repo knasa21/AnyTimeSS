@@ -28,6 +28,16 @@ namespace AnyTimeScreenShot
                 if ( mFileName != value ) { mFileName = value; RaisePropertyChanged(); }
             }
         }
+
+        string mFolderPath;
+        public string FolderPath
+        {
+            get { return mFolderPath; }
+            set
+            {
+                if ( mFolderPath != value ) { mFolderPath = value; RaisePropertyChanged(); }
+            }
+        }
     }
 
     /// <summary>
@@ -143,7 +153,9 @@ namespace AnyTimeScreenShot
         private void ScreenShot()
         {
             Console.WriteLine("Gooooood!!!!");
-            ScreenCapture.Capture( mCaptureRect, $@"D:\Pictures\Capture\{mFileSaveViewModel.FileName}_{counter++}" );
+            string fileName = mFileSaveViewModel.FileName;
+            string folderPath = mFileSaveViewModel.FolderPath;
+            ScreenCapture.Capture( mCaptureRect, $@"{folderPath}\{fileName}_{counter++}" );
         }
 
     }

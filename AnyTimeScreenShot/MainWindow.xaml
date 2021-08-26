@@ -33,8 +33,8 @@
                     </StackPanel>
                     <StackPanel Orientation ="Horizontal" HorizontalAlignment="Stretch" Height="30" Margin="0,80,0,0" VerticalAlignment="Top">
                         <TextBlock TextWrapping="Wrap" Text="保存先" Width="100" TextAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock x:Name ="fFilePath" HorizontalAlignment="Left"  Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="242"/>
-                        <Button Content="保存先変更" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center" Width="75"/>
+                        <TextBlock x:Name ="fFilePath" HorizontalAlignment="Left"  Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding Path=FolderPath, Mode=TwoWay}" VerticalAlignment="Center" Width="242"/>
+                        <Button Content="保存先変更" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center" Width="75" Click="Button_ChooseFolder"/>
                     </StackPanel>
                     <StackPanel Orientation ="Horizontal" HorizontalAlignment="Stretch" Height="30" Margin="0,120,0,0" VerticalAlignment="Top">
                         <TextBox x:Name ="fFileName" HorizontalAlignment="Center" Height="22" Margin="200,4" TextWrapping="Wrap" Text="{Binding Path=FileName}" VerticalAlignment="Center" Width="200" />

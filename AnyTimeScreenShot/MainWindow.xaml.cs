@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Drawing;
 using Xceed.Wpf.Toolkit;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace AnyTimeScreenShot
 {
@@ -98,6 +99,24 @@ namespace AnyTimeScreenShot
         private void FFileName_TextChanged( object sender, TextChangedEventArgs e )
         {
             TextBox form = sender as TextBox;
+        }
+
+        private void Button_ChooseFolder( object sender, RoutedEventArgs e )
+        {
+            using ( var cofd = new CommonOpenFileDialog()
+            {
+                Title = "保存フォルダを選択",
+                InitialDirectory = System.Environment.GetFolderPath( Environment.SpecialFolder.MyPictures ),
+                IsFolderPicker = true,
+            } )
+            {
+                if(cofd.ShowDialog() != CommonFileDialogResult.Ok)
+                {
+                    return;
+                }
+
+                fFilePath.Text = cofd.FileName;
+            }
         }
     }
 }
