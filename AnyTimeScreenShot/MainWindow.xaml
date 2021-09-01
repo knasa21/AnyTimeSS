@@ -39,6 +39,9 @@
                     <StackPanel Orientation ="Horizontal" HorizontalAlignment="Stretch" Height="30" Margin="0,120,0,0" VerticalAlignment="Top">
                         <TextBox x:Name ="fFileName" HorizontalAlignment="Center" Height="22" Margin="200,4" TextWrapping="Wrap" Text="{Binding Path=FileName, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="200" />
                     </StackPanel>
+                    <StackPanel Orientation ="Horizontal" HorizontalAlignment="Stretch" Height="30" Margin="0,150,0,0" VerticalAlignment="Top">
+                        <CheckBox x:Name= "WithTimeStampButton" Content="タイムスタンプ" VerticalAlignment="Center" IsChecked="{Binding Path=WithTimeStamp, Mode=TwoWay}" />
+                    </StackPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="TabItem">

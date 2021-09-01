@@ -29,7 +29,7 @@ namespace AnyTimeScreenShot
             }
         }
 
-        string mFolderPath;
+        string mFolderPath = System.Environment.GetFolderPath( Environment.SpecialFolder.MyPictures );
         public string FolderPath
         {
             get { return mFolderPath; }
@@ -38,6 +38,17 @@ namespace AnyTimeScreenShot
                 if ( mFolderPath != value ) { mFolderPath = value; RaisePropertyChanged(); }
             }
         }
+
+        bool mWithTimeStamp = true;
+        public bool WithTimeStamp
+        {
+            get { return mWithTimeStamp; }
+            set
+            {
+                if ( mWithTimeStamp != value ) { mWithTimeStamp = value; RaisePropertyChanged(); }
+            }
+        }
+
     }
 
     /// <summary>
@@ -107,22 +118,38 @@ namespace AnyTimeScreenShot
         {
             base.OnStartup( e );
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
+
+            // タスクアイコン
             mNotifyIcon = new NotifyIcon();
 
+            // キー監視スレッド
             mKeyWatcher = new KeyWatcher();
             mKeyWatcher.OnPressKey += ScreenShot;
             mKeyWatcher.WatchStart();
 
+            // 値のバインド
             WindowManager.GetSettingWindow().DataContext = mFileSaveViewModel;
 
+            // キャプチャウィンドウにイベント設定
             CaptureAreaWindow window = WindowManager.GetCaptureAreaWindow(); 
             window.DataContext = mFileSaveViewModel;
             window.SizeChanged += AdaptWindowSize;
             window.LocationChanged += AdaptWindowLocation;
 
+            // 起動時オプション開く
             WindowManager.ShowWindow( WindowName.SETTING );
+
+            // 起動時にキャプチャウィンドウを表示して値取得
+            WindowManager.ShowWindow( WindowName.CAPTURE );
+            AdaptWindowSize( null, null );
+            AdaptWindowLocation( null, null );
+            // すぐ閉じる
+            WindowManager.SetVisible( WindowName.CAPTURE, Visibility.Hidden );
         }
 
+        /// <summary>
+        /// ウィンドウサイズを反映
+        /// </summary>
         private void AdaptWindowSize( object sender, SizeChangedEventArgs e )
         {
             MainWindow settingWindow = WindowManager.GetSettingWindow();
@@ -134,6 +161,9 @@ namespace AnyTimeScreenShot
             mCaptureRect.Height = (int)areaWindow.Height;
         }
 
+        /// <summary>
+        /// ウィンドウ位置を反映
+        /// </summary>
         private void AdaptWindowLocation( object sender, EventArgs e )
         {
             MainWindow settingWindow = WindowManager.GetSettingWindow();
@@ -145,6 +175,9 @@ namespace AnyTimeScreenShot
             mCaptureRect.Y = (int)areaWindow.Top;
         }
 
+        /// <summary>
+        /// OnExit
+        /// </summary>
         protected override void OnExit( ExitEventArgs e )
         {
             mKeyWatcher.WatchStop();
@@ -152,13 +185,25 @@ namespace AnyTimeScreenShot
             mNotifyIcon.Dispose();
         }
 
+        /// <summary>
+        /// スクリーンショット
+        /// </summary>
         private void ScreenShot()
         {
-            Console.WriteLine("Gooooood!!!!");
             string fileName = mFileSaveViewModel.FileName;
             string folderPath = mFileSaveViewModel.FolderPath;
-            ScreenCapture.Capture( mCaptureRect, $@"{folderPath}\{fileName}_{counter++}" );
+            if(mFileSaveViewModel.WithTimeStamp)
+            {
+                fileName += GetTimeStamp();
+            }
+            ScreenCapture.Capture( mCaptureRect, $@"{folderPath}\{fileName}" );
         }
 
+        private string GetTimeStamp()
+        {
+            DateTime date = DateTime.Now;
+
+            return date.ToString( "yyyyMMdd_HHmmssfff" );
+        }
     }
 }
