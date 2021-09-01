@@ -119,6 +119,8 @@ namespace AnyTimeScreenShot
             window.DataContext = mFileSaveViewModel;
             window.SizeChanged += AdaptWindowSize;
             window.LocationChanged += AdaptWindowLocation;
+
+            WindowManager.ShowWindow( WindowName.SETTING );
         }
 
         private void AdaptWindowSize( object sender, SizeChangedEventArgs e )
